@@ -113,7 +113,7 @@ public class CustomKeysActivity extends Activity implements AddWordDialogFragmen
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int index) {
-        if(index > 0) {
+        if(index >= 0) {
             adapter.remove(index);
         }
         dialog.dismiss();
