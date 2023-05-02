@@ -55,28 +55,44 @@ public class AddWordDialogFragment extends DialogFragment {
             ((TextView)view.findViewById(R.id.word)).setText(existingWord);
         }
         final int index = getArguments().getInt("index");
+        final int keyCount = getArguments().getInt("keyCount");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(view)
                 // Add action buttons
                 .setTitle("Edit Key")
-                .setNeutralButton("Move up", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNeutralClick(index);
-                    }
-                })
                 .setPositiveButton(index > -1 ? "OK" : "Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogPositiveClick(AddWordDialogFragment.this, index);
                     }
-                })
-                .setNegativeButton(index > -1 ? "Delete" : "Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClick(AddWordDialogFragment.this, index);
-                    }
                 });
+
+        if (index >= 1) {
+            builder.setNeutralButton("Move up", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    mListener.onDialogNeutralClick(index);
+                }
+            });
+        }
+
+        if (index == -1) {
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (keyCount > 1) {
+            builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    mListener.onDialogNegativeClick(AddWordDialogFragment.this, index);
+                }
+            });
+        }
+
         return builder.create();
     }
 }
